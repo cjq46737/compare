@@ -3,9 +3,9 @@
     <header class="CompareView-header">
       <h1 class="CompareView-title">内容比对</h1>
       <div class="CompareView-actions">
-        <div class="CompareView-type">
+        <div class="CompareView-type" :title="strictCompare ? '严格比对时仅逐行比对，不考虑比对类型' : ''">
           <span class="CompareView-type-label">比对类型</span>
-          <select v-model="contentType" class="CompareView-select">
+          <select v-model="contentType" class="CompareView-select" :disabled="strictCompare">
             <option value="sql">SQL</option>
             <option value="java">Java 源码</option>
             <option value="html">HTML</option>
@@ -129,6 +129,7 @@ export default {
       const rightLines = this.rightContent ? this.rightContent.split('\n') : []
       const maxLen = Math.max(leftLines.length, rightLines.length)
 
+      // 严格比对：逐行比对，且不考虑比对类型（contentType 不参与）
       const result = []
       for (let i = 0; i < maxLen; i++) {
         const left = leftLines[i] != null ? leftLines[i] : ''
@@ -257,6 +258,11 @@ export default {
 
 .CompareView-select:hover {
   border-color: #565f89;
+}
+
+.CompareView-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .CompareView-btn {

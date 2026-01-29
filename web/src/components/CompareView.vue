@@ -34,6 +34,7 @@
           class="CompareView-textarea"
           :value="ToDisplay(leftContent)"
           :placeholder="`在此输入或粘贴左侧${ContentTypeDisplay}...`"
+          @keydown="OnContentKeydown($event, 'left')"
           @input="OnLeftInput($event)"
           @scroll="syncScroll && OnLeftScroll($event)"
         />
@@ -46,6 +47,7 @@
           class="CompareView-textarea"
           :value="ToDisplay(rightContent)"
           :placeholder="`在此输入或粘贴右侧${ContentTypeDisplay}...`"
+          @keydown="OnContentKeydown($event, 'right')"
           @input="OnRightInput($event)"
           @scroll="syncScroll && OnRightScroll($event)"
         />
@@ -166,6 +168,24 @@ export default {
         .replace(/\u200B␍/g, '\r')
         .replace(/\u200B⇥/g, '\t')
         .replace(/\u200B·/g, ' ')
+    },
+    OnContentKeydown(e, side) {
+      if (e.key !== 'Tab') return
+      e.preventDefault()
+      const ta = e.target
+      const val = ta.value
+      const start = ta.selectionStart
+      const end = ta.selectionEnd
+      const tabDisplay = this.ToDisplay('\t')
+      const newVal = val.slice(0, start) + tabDisplay + val.slice(end)
+      if (side === 'left') {
+        this.leftContent = this.FromDisplay(newVal)
+      } else {
+        this.rightContent = this.FromDisplay(newVal)
+      }
+      this.$nextTick(() => {
+        ta.selectionStart = ta.selectionEnd = start + tabDisplay.length
+      })
     },
     OnLeftInput(e) {
       const ta = e.target

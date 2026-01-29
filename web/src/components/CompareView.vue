@@ -3,6 +3,16 @@
     <header class="CompareView-header">
       <h1 class="CompareView-title">内容比对</h1>
       <div class="CompareView-actions">
+        <div class="CompareView-type">
+          <span class="CompareView-type-label">比对类型</span>
+          <select v-model="contentType" class="CompareView-select">
+            <option value="sql">SQL</option>
+            <option value="java">Java 源码</option>
+            <option value="html">HTML</option>
+            <option value="yml">YAML / YML</option>
+            <option value="vue">Vue 文件</option>
+          </select>
+        </div>
         <button type="button" class="CompareView-btn" @click="ClearLeft">清空左侧</button>
         <button type="button" class="CompareView-btn" @click="ClearRight">清空右侧</button>
         <button type="button" class="CompareView-btn CompareView-btn--primary" @click="SwapContent">交换内容</button>
@@ -18,7 +28,7 @@
         <textarea
           class="CompareView-textarea"
           v-model="leftContent"
-          placeholder="在此输入或粘贴左侧内容..."
+          :placeholder="`在此输入或粘贴左侧${ContentTypeDisplay}...`"
           @scroll="syncScroll && OnLeftScroll($event)"
         />
       </div>
@@ -29,7 +39,7 @@
           ref="rightTextarea"
           class="CompareView-textarea"
           v-model="rightContent"
-          placeholder="在此输入或粘贴右侧内容..."
+          :placeholder="`在此输入或粘贴右侧${ContentTypeDisplay}...`"
           @scroll="syncScroll && OnRightScroll($event)"
         />
       </div>
@@ -72,7 +82,8 @@ export default {
       leftContent: '',
       rightContent: '',
       syncScroll: true,
-      isScrollingFromSync: false
+      isScrollingFromSync: false,
+      contentType: 'sql'
     }
   },
   computed: {
@@ -84,6 +95,22 @@ export default {
     },
     HasDifference() {
       return this.leftContent !== this.rightContent
+    },
+    ContentTypeDisplay() {
+      switch (this.contentType) {
+        case 'sql':
+          return ' SQL'
+        case 'java':
+          return ' Java 源码'
+        case 'html':
+          return ' HTML'
+        case 'yml':
+          return ' YAML / YML'
+        case 'vue':
+          return ' Vue 文件'
+        default:
+          return ' 内容'
+      }
     },
     ComparedLines() {
       const leftLines = this.leftContent ? this.leftContent.split('\n') : []
@@ -174,6 +201,35 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.CompareView-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #1f2335;
+}
+
+.CompareView-type-label {
+  font-size: 12px;
+  color: #9aa5ce;
+}
+
+.CompareView-select {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #363b54;
+  background: #24283b;
+  color: #c0caf5;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.CompareView-select:hover {
+  border-color: #565f89;
 }
 
 .CompareView-btn {

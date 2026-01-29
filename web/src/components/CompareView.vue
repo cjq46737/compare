@@ -30,9 +30,11 @@
       <div class="CompareView-panel CompareView-panel--left">
         <div class="CompareView-panel-header">左侧内容</div>
         <textarea
+          ref="leftTextarea"
           class="CompareView-textarea"
-          v-model="leftContent"
+          :value="ToDisplay(leftContent)"
           :placeholder="`在此输入或粘贴左侧${ContentTypeDisplay}...`"
+          @input="OnLeftInput($event)"
           @scroll="syncScroll && OnLeftScroll($event)"
         />
       </div>
@@ -42,8 +44,9 @@
         <textarea
           ref="rightTextarea"
           class="CompareView-textarea"
-          v-model="rightContent"
+          :value="ToDisplay(rightContent)"
           :placeholder="`在此输入或粘贴右侧${ContentTypeDisplay}...`"
+          @input="OnRightInput($event)"
           @scroll="syncScroll && OnRightScroll($event)"
         />
       </div>
@@ -146,6 +149,44 @@ export default {
     }
   },
   methods: {
+    // 将真实内容转为“可见空白”显示：空格 ·、Tab ⇥、换行 ↵、回车 ␍（零宽前缀防歧义）
+    ToDisplay(s) {
+      if (s == null || s === '') return ''
+      return String(s)
+        .replace(/\r\n/g, '\u200B↵\n')
+        .replace(/\n/g, '\u200B↵\n')
+        .replace(/\r/g, '\u200B␍')
+        .replace(/\t/g, '\u200B⇥')
+        .replace(/ /g, '\u200B·')
+    },
+    FromDisplay(s) {
+      if (s == null || s === '') return ''
+      return String(s)
+        .replace(/\u200B↵\n/g, '\n')
+        .replace(/\u200B␍/g, '\r')
+        .replace(/\u200B⇥/g, '\t')
+        .replace(/\u200B·/g, ' ')
+    },
+    OnLeftInput(e) {
+      const ta = e.target
+      const raw = ta.value
+      const realPrefixLen = this.FromDisplay(raw.substring(0, ta.selectionStart)).length
+      this.leftContent = this.FromDisplay(raw)
+      this.$nextTick(() => {
+        const displayPrefix = this.ToDisplay(this.leftContent.substring(0, realPrefixLen))
+        ta.selectionStart = ta.selectionEnd = displayPrefix.length
+      })
+    },
+    OnRightInput(e) {
+      const ta = e.target
+      const raw = ta.value
+      const realPrefixLen = this.FromDisplay(raw.substring(0, ta.selectionStart)).length
+      this.rightContent = this.FromDisplay(raw)
+      this.$nextTick(() => {
+        const displayPrefix = this.ToDisplay(this.rightContent.substring(0, realPrefixLen))
+        ta.selectionStart = ta.selectionEnd = displayPrefix.length
+      })
+    },
     NormalizeForCompare(text) {
       if (!text) return ''
       return text
@@ -185,7 +226,7 @@ export default {
     OnRightScroll(event) {
       if (this.isScrollingFromSync) return
       this.isScrollingFromSync = true
-      const leftEl = this.$el.querySelector('.CompareView-panel--left .CompareView-textarea')
+      const leftEl = this.$refs.leftTextarea
       if (leftEl) {
         leftEl.scrollTop = event.target.scrollTop
         leftEl.scrollLeft = event.target.scrollLeft

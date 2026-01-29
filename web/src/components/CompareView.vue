@@ -20,6 +20,10 @@
           <input v-model="syncScroll" type="checkbox">
           同步滚动
         </label>
+        <label class="CompareView-sync">
+          <input v-model="strictCompare" type="checkbox">
+          严格比对
+        </label>
       </div>
     </header>
     <div class="CompareView-body">
@@ -83,7 +87,8 @@ export default {
       rightContent: '',
       syncScroll: true,
       isScrollingFromSync: false,
-      contentType: 'sql'
+      contentType: 'sql',
+      strictCompare: true
     }
   },
   computed: {
@@ -94,7 +99,14 @@ export default {
       return this.rightContent ? this.rightContent.split('\n').length : 0
     },
     HasDifference() {
-      return this.leftContent !== this.rightContent
+      if (this.strictCompare) return this.leftContent !== this.rightContent
+      return this.NormalizedLeft !== this.NormalizedRight
+    },
+    NormalizedLeft() {
+      return this.NormalizeForCompare(this.leftContent)
+    },
+    NormalizedRight() {
+      return this.NormalizeForCompare(this.rightContent)
     },
     ContentTypeDisplay() {
       switch (this.contentType) {
@@ -121,16 +133,31 @@ export default {
       for (let i = 0; i < maxLen; i++) {
         const left = leftLines[i] != null ? leftLines[i] : ''
         const right = rightLines[i] != null ? rightLines[i] : ''
+        const leftNorm = this.strictCompare ? left : this.NormalizeLine(left)
+        const rightNorm = this.strictCompare ? right : this.NormalizeLine(right)
         result.push({
           left,
           right,
-          isDiff: left !== right
+          isDiff: leftNorm !== rightNorm
         })
       }
       return result
     }
   },
   methods: {
+    NormalizeForCompare(text) {
+      if (!text) return ''
+      return text
+        .split('\n')
+        .map((line) => this.NormalizeLine(line))
+        .join('\n')
+    },
+    NormalizeLine(line) {
+      if (line == null) return ''
+      return String(line)
+        .replace(/\s+/g, ' ')
+        .trim()
+    },
     ClearLeft() {
       this.leftContent = ''
     },

@@ -16,8 +16,8 @@
       <div class="CompareView-panel CompareView-panel--left">
         <div class="CompareView-panel-header">左侧内容</div>
         <textarea
-          v-model="leftContent"
           class="CompareView-textarea"
+          v-model="leftContent"
           placeholder="在此输入或粘贴左侧内容..."
           @scroll="syncScroll && OnLeftScroll($event)"
         />
@@ -27,11 +27,33 @@
         <div class="CompareView-panel-header">右侧内容</div>
         <textarea
           ref="rightTextarea"
-          v-model="rightContent"
           class="CompareView-textarea"
+          v-model="rightContent"
           placeholder="在此输入或粘贴右侧内容..."
           @scroll="syncScroll && OnRightScroll($event)"
         />
+      </div>
+    </div>
+    <div class="CompareView-result" v-if="ComparedLines.length">
+      <div class="CompareView-result-column CompareView-result-column--left">
+        <div
+          v-for="(line, index) in ComparedLines"
+          :key="'left-' + index"
+          :class="['CompareView-line', { 'CompareView-line--diff': line.isDiff }]"
+        >
+          <span class="CompareView-line-number">{{ index + 1 }}</span>
+          <span class="CompareView-line-text">{{ line.left }}</span>
+        </div>
+      </div>
+      <div class="CompareView-result-column CompareView-result-column--right">
+        <div
+          v-for="(line, index) in ComparedLines"
+          :key="'right-' + index"
+          :class="['CompareView-line', { 'CompareView-line--diff': line.isDiff }]"
+        >
+          <span class="CompareView-line-number">{{ index + 1 }}</span>
+          <span class="CompareView-line-text">{{ line.right }}</span>
+        </div>
       </div>
     </div>
     <footer class="CompareView-footer">
@@ -62,6 +84,23 @@ export default {
     },
     HasDifference() {
       return this.leftContent !== this.rightContent
+    },
+    ComparedLines() {
+      const leftLines = this.leftContent ? this.leftContent.split('\n') : []
+      const rightLines = this.rightContent ? this.rightContent.split('\n') : []
+      const maxLen = Math.max(leftLines.length, rightLines.length)
+
+      const result = []
+      for (let i = 0; i < maxLen; i++) {
+        const left = leftLines[i] != null ? leftLines[i] : ''
+        const right = rightLines[i] != null ? rightLines[i] : ''
+        result.push({
+          left,
+          right,
+          isDiff: left !== right
+        })
+      }
+      return result
     }
   },
   methods: {
@@ -182,6 +221,58 @@ export default {
   display: flex;
   min-height: 0;
   overflow: hidden;
+}
+
+.CompareView-result {
+  flex: 1;
+  display: flex;
+  min-height: 160px;
+  max-height: 40vh;
+  border-top: 1px solid #363b54;
+  background: #111827;
+  overflow: auto;
+}
+
+.CompareView-result-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 8px 0;
+}
+
+.CompareView-result-column--left {
+  border-right: 1px solid #363b54;
+}
+
+.CompareView-line {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+  border-left: 3px solid transparent;
+}
+
+.CompareView-line-number {
+  flex-shrink: 0;
+  width: 40px;
+  margin-right: 8px;
+  text-align: right;
+  color: #565f89;
+  user-select: none;
+}
+
+.CompareView-line-text {
+  flex: 1;
+  color: #c0caf5;
+  word-break: break-all;
+}
+
+.CompareView-line--diff {
+  background: rgba(247, 118, 142, 0.12);
+  border-left-color: #f7768e;
 }
 
 .CompareView-panel {

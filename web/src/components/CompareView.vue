@@ -48,7 +48,7 @@
         />
       </div>
     </div>
-    <div class="CompareView-result" v-if="ComparedLines.length">
+    <div class="CompareView-result" v-if="ComparedLines.length && HasDifference">
       <div class="CompareView-result-column CompareView-result-column--left">
         <div
           v-for="(line, index) in ComparedLines"
@@ -424,10 +424,14 @@ export default {
 }
 
 .CompareView-diff {
+  font-size: 16px;
+  font-weight: 500;
   color: #f7768e;
 }
 
 .CompareView-same {
+  font-size: 16px;
+  font-weight: 500;
   color: #9ece6a;
 }
 </style>

@@ -756,7 +756,18 @@ Done. I've created application.yml with the same configuration and deleted appli
 server:
   port: 8080
   servlet:
-    context-path: /compar
+    context-path: /compare
+```
+
+2. **删除** `src/main/resources/application.properties`。
+
+端口和 context path 保持不变，Spring Boot 会优先使用 `application.yml` 作为配置来源。
+
+---
+
+_**User**_
+
+右下角的   内容一致、内容不一致。字体调大一些
 
 ---
 

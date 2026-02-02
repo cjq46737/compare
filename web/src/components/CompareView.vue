@@ -61,7 +61,7 @@
           :class="['CompareView-line', { 'CompareView-line--diff': line.isDiff }]"
         >
           <span class="CompareView-line-number">{{ index + 1 }}</span>
-          <span class="CompareView-line-text">{{ line.left }}</span>
+          <span class="CompareView-line-text">{{ ToDisplay(line.left) }}</span>
         </div>
       </div>
       <div class="CompareView-result-column CompareView-result-column--right">
@@ -71,7 +71,7 @@
           :class="['CompareView-line', { 'CompareView-line--diff': line.isDiff }]"
         >
           <span class="CompareView-line-number">{{ index + 1 }}</span>
-          <span class="CompareView-line-text">{{ line.right }}</span>
+          <span class="CompareView-line-text">{{ ToDisplay(line.right) }}</span>
         </div>
       </div>
     </div>

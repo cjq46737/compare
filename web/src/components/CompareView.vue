@@ -103,9 +103,9 @@ export default {
     RightLineCount() {
       return this.rightContent ? this.rightContent.split('\n').length : 0
     },
+    // 与逐行比对结果一致：有任一行 isDiff 则为不一致
     HasDifference() {
-      if (this.strictCompare) return this.leftContent !== this.rightContent
-      return this.NormalizedLeft !== this.NormalizedRight
+      return this.ComparedLines.some((row) => row.isDiff)
     },
     NormalizedLeft() {
       return this.NormalizeForCompare(this.leftContent)
@@ -134,13 +134,15 @@ export default {
       const rightLines = this.rightContent ? this.rightContent.split('\n') : []
       const maxLen = Math.max(leftLines.length, rightLines.length)
 
-      // 严格比对：逐行比对，且不考虑比对类型（contentType 不参与）
+      // 严格比对：逐行比对且不考虑类型；非严格且 SQL 时按 SQL 语法与注释规范化后再比
+      const leftNormLines = this.GetNormalizedLinesForCompare(leftLines, this.leftContent)
+      const rightNormLines = this.GetNormalizedLinesForCompare(rightLines, this.rightContent)
       const result = []
       for (let i = 0; i < maxLen; i++) {
         const left = leftLines[i] != null ? leftLines[i] : ''
         const right = rightLines[i] != null ? rightLines[i] : ''
-        const leftNorm = this.strictCompare ? left : this.NormalizeLine(left)
-        const rightNorm = this.strictCompare ? right : this.NormalizeLine(right)
+        const leftNorm = leftNormLines[i] ?? ''
+        const rightNorm = rightNormLines[i] ?? ''
         result.push({
           left,
           right,
@@ -209,10 +211,100 @@ export default {
     },
     NormalizeForCompare(text) {
       if (!text) return ''
-      return text
+      const stripped = this.strictCompare || this.contentType !== 'sql'
+        ? text
+        : this.StripSqlComments(text)
+      return stripped
         .split('\n')
         .map((line) => this.NormalizeLine(line))
         .join('\n')
+    },
+    // 非严格且 SQL 时：先剥注释再按行规范化；否则严格用原行，非严格非 SQL 仅按行空白规范化
+    GetNormalizedLinesForCompare(lines, fullText) {
+      if (this.strictCompare) return lines
+      if (this.contentType === 'sql') {
+        const stripped = this.StripSqlComments(fullText || '')
+        return stripped.split('\n').map((line) => this.NormalizeLine(line))
+      }
+      return lines.map((line) => this.NormalizeLine(line))
+    },
+    // 去除 SQL 注释（--、# 单行，/* */ 块），不删除字符串内的符号
+    StripSqlComments(text) {
+      if (text == null || text === '') return ''
+      const s = String(text)
+      let out = ''
+      let i = 0
+      let state = 'normal' // normal | single | double | line | block
+      while (i < s.length) {
+        const c = s[i]
+        const next = s[i + 1]
+        if (state === 'normal') {
+          if (c === "'") {
+            out += c
+            state = 'single'
+            i += 1
+          } else if (c === '"') {
+            out += c
+            state = 'double'
+            i += 1
+          } else if (c === '-' && next === '-') {
+            state = 'line'
+            i += 2
+          } else if (c === '#') {
+            state = 'line'
+            i += 1
+          } else if (c === '/' && next === '*') {
+            state = 'block'
+            i += 2
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'single') {
+          if (c === "'") {
+            if (next === "'") {
+              out += "''"
+              i += 2
+            } else {
+              out += c
+              state = 'normal'
+              i += 1
+            }
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'double') {
+          if (c === '"') {
+            out += c
+            state = 'normal'
+            i += 1
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'line') {
+          if (c === '\n' || c === '\r') {
+            out += c
+            state = 'normal'
+            i += 1
+            if (c === '\r' && next === '\n') {
+              out += next
+              i += 1
+            }
+          } else {
+            i += 1
+          }
+        } else if (state === 'block') {
+          if (c === '*' && next === '/') {
+            state = 'normal'
+            i += 2
+          } else {
+            i += 1
+          }
+        }
+      }
+      return out
     },
     NormalizeLine(line) {
       if (line == null) return ''

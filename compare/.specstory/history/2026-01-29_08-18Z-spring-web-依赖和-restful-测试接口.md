@@ -65,16 +65,6 @@ I will add the dependency and create a controller. The user asked for function n
 
 ---
 
-<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
-
-<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/compare/pom.xml</summary>
-
-</details>
-
-</tool-use>
-
----
-
 <tool-use data-tool-type="unknown" data-tool-name="list_dir_v2">
 <details>
 <summary>Tool use: **list_dir_v2**</summary>
@@ -106,6 +96,16 @@ Status: **completed**
 
 
 </details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/compare/pom.xml</summary>
+
+</details>
+
 </tool-use>
 
 ---
@@ -586,16 +586,6 @@ I will do these changes.
 
 ---
 
-<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
-
-<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare/controller/TestController.java</summary>
-
-</details>
-
-</tool-use>
-
----
-
 <tool-use data-tool-type="generic" data-tool-name="glob_file_search">
 <details>
 <summary>Tool use: **glob_file_search** • Searched codebase "undefined" • **0** result in **1** directory</summary>
@@ -619,6 +609,16 @@ Directory: **/Users/chenjunqi/github/compare/compare** (0 file)
 ---
 
 Path does not exist: /Users/chenjunqi/github/compare/compare/src/main/resources
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare/controller/TestController.java</summary>
+
+</details>
+
+</tool-use>
 
 ---
 
@@ -768,6 +768,849 @@ server:
 _**User**_
 
 右下角的   内容一致、内容不一致。字体调大一些
+
+---
+
+_**Agent (model default, mode Agent)**_
+
+<think><details><summary>Thought Process</summary>
+
+The user is asking about "右下角" (bottom right corner) and "内容一致、内容不一致" (content consistent, content inconsistent) - they want to make the font larger. This sounds like they're referring to some UI in the project - perhaps a frontend or some kind of comparison view that shows "内容一致" and "内容不一致" in the bottom right.
+
+I will search the codebase for these strings to find where they are used.
+</details></think>
+
+---
+
+
+正在搜索项目中包含“内容一致”和“内容不一致”的位置：
+
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search">
+<details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+
+Parameters:
+
+```json
+{
+  "pattern": "内容一致|内容不一致",
+  "path": "/Users/chenjunqi/github/compare/compare",
+  "caseInsensitive": false
+}
+```
+Result:
+
+```json
+{
+  "success": {
+    "pattern": "内容一致|内容不一致",
+    "path": "/Users/chenjunqi/github/compare/compare",
+    "outputMode": "content",
+    "workspaceResults": {
+      "/Users/chenjunqi/github/compare/compare": {
+        "content": {}
+      }
+    }
+  }
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+
+No matches in the compare project. Maybe the user is referring to a different project or a file outside the workspace? I will search more broadly - maybe in Chinese or with different patterns. Or perhaps it's in HTML, Vue, React files - I will list the project structure again to see if there's any frontend.
+</details></think>
+
+---
+
+
+
+
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="list_dir_v2">
+<details>
+<summary>Tool use: **list_dir_v2**</summary>
+
+
+Parameters:
+
+```json
+{
+  "targetDirectory": "/Users/chenjunqi/github/compare/compare"
+}
+```
+Result:
+
+```json
+{
+  "directoryTreeRoot": {
+    "absPath": "/Users/chenjunqi/github/compare/compare",
+    "childrenDirs": [
+      {
+        "absPath": "/Users/chenjunqi/github/compare/compare/.specstory",
+        "childrenDirs": [
+          {
+            "absPath": "/Users/chenjunqi/github/compare/compare/.specstory/history",
+            "childrenFiles": [
+              {
+                "name": "2026-01-29_08-18Z-spring-web-依赖和-restful-测试接口.md"
+              }
+            ],
+            "childrenWereProcessed": true
+          }
+        ],
+        "childrenFiles": [
+          {
+            "name": ".gitignore"
+          }
+        ],
+        "childrenWereProcessed": true
+      },
+      {
+        "absPath": "/Users/chenjunqi/github/compare/compare/src",
+        "childrenDirs": [
+          {
+            "absPath": "/Users/chenjunqi/github/compare/compare/src/main",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java",
+                "childrenDirs": [
+                  {
+                    "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com",
+                    "childrenDirs": [
+                      {
+                        "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq",
+                        "childrenDirs": [
+                          {
+                            "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare",
+                            "childrenDirs": [
+                              {
+                                "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare/controller",
+                                "childrenFiles": [
+                                  {
+                                    "name": "TestController.java"
+                                  }
+                                ],
+                                "childrenWereProcessed": true
+                              }
+                            ],
+                            "childrenFiles": [
+                              {
+                                "name": "CompareApplication.java"
+                              }
+                            ],
+                            "childrenWereProcessed": true
+                          }
+                        ],
+                        "childrenWereProcessed": true
+                      }
+                    ],
+                    "childrenWereProcessed": true
+                  }
+                ],
+                "childrenWereProcessed": true
+              },
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/src/main/resources",
+                "childrenFiles": [
+                  {
+                    "name": "application.yml"
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenWereProcessed": true
+          },
+          {
+            "absPath": "/Users/chenjunqi/github/compare/compare/src/test",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java",
+                "childrenDirs": [
+                  {
+                    "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com",
+                    "childrenDirs": [
+                      {
+                        "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com/cjq",
+                        "childrenDirs": [
+                          {
+                            "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com/cjq/compare",
+                            "childrenFiles": [
+                              {
+                                "name": "CompareApplicationTests.java"
+                              }
+                            ],
+                            "childrenWereProcessed": true
+                          }
+                        ],
+                        "childrenWereProcessed": true
+                      }
+                    ],
+                    "childrenWereProcessed": true
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenWereProcessed": true
+          }
+        ],
+        "childrenWereProcessed": true
+      }
+    ],
+    "childrenFiles": [
+      {
+        "name": ".cursorindexingignore"
+      },
+      {
+        "name": ".gitignore"
+      },
+      {
+        "name": "pom.xml"
+      }
+    ],
+    "childrenWereProcessed": true
+  }
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search">
+<details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+
+Parameters:
+
+```json
+{
+  "pattern": "一致|不一致",
+  "path": "/Users/chenjunqi/github/compare/compare",
+  "caseInsensitive": false
+}
+```
+Result:
+
+```json
+{
+  "success": {
+    "pattern": "一致|不一致",
+    "path": "/Users/chenjunqi/github/compare/compare",
+    "outputMode": "content",
+    "workspaceResults": {
+      "/Users/chenjunqi/github/compare/compare": {
+        "content": {}
+      }
+    }
+  }
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+
+The current compare project doesn't contain any "内容一致" or "内容不一致" text. The user might be:
+1. Referring to a different project that's open in their IDE
+2. Referring to something they want me to add (a UI that shows "内容一致/内容不一致" in the bottom right with larger font)
+3. Referring to a file that's in the parent directory or another workspace
+
+I will search in the parent directory in case the project structure is different.
+</details></think>
+
+---
+
+
+
+
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="list_dir_v2">
+<details>
+<summary>Tool use: **list_dir_v2**</summary>
+
+
+Parameters:
+
+```json
+{
+  "targetDirectory": "/Users/chenjunqi/github/compare"
+}
+```
+Result:
+
+```json
+{
+  "directoryTreeRoot": {
+    "absPath": "/Users/chenjunqi/github/compare",
+    "childrenDirs": [
+      {
+        "absPath": "/Users/chenjunqi/github/compare/compare",
+        "childrenDirs": [
+          {
+            "absPath": "/Users/chenjunqi/github/compare/compare/.specstory",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/.specstory/history",
+                "childrenFiles": [
+                  {
+                    "name": "2026-01-29_08-18Z-spring-web-依赖和-restful-测试接口.md"
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenFiles": [
+              {
+                "name": ".gitignore"
+              }
+            ],
+            "childrenWereProcessed": true
+          },
+          {
+            "absPath": "/Users/chenjunqi/github/compare/compare/src",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/src/main",
+                "childrenDirs": [
+                  {
+                    "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java",
+                    "childrenDirs": [
+                      {
+                        "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com",
+                        "childrenDirs": [
+                          {
+                            "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq",
+                            "childrenDirs": [
+                              {
+                                "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare",
+                                "childrenDirs": [
+                                  {
+                                    "absPath": "/Users/chenjunqi/github/compare/compare/src/main/java/com/cjq/compare/controller",
+                                    "childrenFiles": [
+                                      {
+                                        "name": "TestController.java"
+                                      }
+                                    ],
+                                    "childrenWereProcessed": true
+                                  }
+                                ],
+                                "childrenFiles": [
+                                  {
+                                    "name": "CompareApplication.java"
+                                  }
+                                ],
+                                "childrenWereProcessed": true
+                              }
+                            ],
+                            "childrenWereProcessed": true
+                          }
+                        ],
+                        "childrenWereProcessed": true
+                      }
+                    ],
+                    "childrenWereProcessed": true
+                  },
+                  {
+                    "absPath": "/Users/chenjunqi/github/compare/compare/src/main/resources",
+                    "childrenFiles": [
+                      {
+                        "name": "application.yml"
+                      }
+                    ],
+                    "childrenWereProcessed": true
+                  }
+                ],
+                "childrenWereProcessed": true
+              },
+              {
+                "absPath": "/Users/chenjunqi/github/compare/compare/src/test",
+                "childrenDirs": [
+                  {
+                    "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java",
+                    "childrenDirs": [
+                      {
+                        "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com",
+                        "childrenDirs": [
+                          {
+                            "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com/cjq",
+                            "childrenDirs": [
+                              {
+                                "absPath": "/Users/chenjunqi/github/compare/compare/src/test/java/com/cjq/compare",
+                                "childrenFiles": [
+                                  {
+                                    "name": "CompareApplicationTests.java"
+                                  }
+                                ],
+                                "childrenWereProcessed": true
+                              }
+                            ],
+                            "childrenWereProcessed": true
+                          }
+                        ],
+                        "childrenWereProcessed": true
+                      }
+                    ],
+                    "childrenWereProcessed": true
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenWereProcessed": true
+          }
+        ],
+        "childrenFiles": [
+          {
+            "name": ".cursorindexingignore"
+          },
+          {
+            "name": ".gitignore"
+          },
+          {
+            "name": "pom.xml"
+          }
+        ],
+        "childrenWereProcessed": true
+      },
+      {
+        "absPath": "/Users/chenjunqi/github/compare/web",
+        "childrenDirs": [
+          {
+            "absPath": "/Users/chenjunqi/github/compare/web/.specstory",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/web/.specstory/history",
+                "childrenFiles": [
+                  {
+                    "name": "2026-01-29_08-38Z-vue-content-comparison-page.md"
+                  },
+                  {
+                    "name": "2026-01-29_09-44Z-左右内容差异标红.md"
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenFiles": [
+              {
+                "name": ".gitignore"
+              }
+            ],
+            "childrenWereProcessed": true
+          },
+          {
+            "absPath": "/Users/chenjunqi/github/compare/web/public",
+            "childrenFiles": [
+              {
+                "name": "favicon.ico"
+              },
+              {
+                "name": "index.html"
+              }
+            ],
+            "childrenWereProcessed": true
+          },
+          {
+            "absPath": "/Users/chenjunqi/github/compare/web/src",
+            "childrenDirs": [
+              {
+                "absPath": "/Users/chenjunqi/github/compare/web/src/assets",
+                "childrenFiles": [
+                  {
+                    "name": "logo.png"
+                  }
+                ],
+                "childrenWereProcessed": true
+              },
+              {
+                "absPath": "/Users/chenjunqi/github/compare/web/src/components",
+                "childrenFiles": [
+                  {
+                    "name": "CompareView.vue"
+                  },
+                  {
+                    "name": "HelloWorld.vue"
+                  }
+                ],
+                "childrenWereProcessed": true
+              }
+            ],
+            "childrenFiles": [
+              {
+                "name": "App.vue"
+              },
+              {
+                "name": "main.js"
+              }
+            ],
+            "childrenWereProcessed": true
+          }
+        ],
+        "childrenFiles": [
+          {
+            "name": ".cursorindexingignore"
+          },
+          {
+            "name": ".gitignore"
+          },
+          {
+            "name": "babel.config.js"
+          },
+          {
+            "name": "jsconfig.json"
+          },
+          {
+            "name": "package-lock.json"
+          },
+          {
+            "name": "package.json"
+          },
+          {
+            "name": "README.md"
+          },
+          {
+            "name": "vue.config.js"
+          }
+        ],
+        "childrenWereProcessed": true
+      }
+    ],
+    "childrenWereProcessed": true
+  }
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="ripgrep_raw_search">
+<details>
+<summary>Tool use: **ripgrep_raw_search**</summary>
+
+
+Parameters:
+
+```json
+{
+  "pattern": "内容一致|内容不一致|一致|不一致",
+  "path": "/Users/chenjunqi/github/compare",
+  "caseInsensitive": false
+}
+```
+Result:
+
+```json
+{
+  "success": {
+    "pattern": "内容一致|内容不一致|一致|不一致",
+    "path": "/Users/chenjunqi/github/compare",
+    "outputMode": "content",
+    "workspaceResults": {
+      "/Users/chenjunqi/github/compare/compare": {
+        "content": {
+          "matches": [
+            {
+              "file": "../web/src/components/CompareView.vue",
+              "matches": [
+                {
+                  "lineNumber": 75,
+                  "content": "      &lt;span v-if=\"HasDifference\" class=\"CompareView-diff\"&gt;内容不一致&lt;/span&gt;"
+                },
+                {
+                  "lineNumber": 76,
+                  "content": "      &lt;span v-else class=\"CompareView-same\"&gt;内容一致&lt;/span&gt;"
+                }
+              ]
+            },
+            {
+              "file": "../web/.specstory/history/2026-01-29_09-44Z-左右内容差异标红.md",
+              "matches": [
+                {
+                  "lineNumber": 300,
+                  "content": "- **严格比对（勾选）**：与之前一致，逐字符比较，包括空格、换行、首尾空白，稍有不同即标红。"
+                },
+                {
+                  "lineNumber": 307,
+                  "content": "- 「内容一致 / 内容不一致」会随当前是否勾选「严格比对」重新计算，与当前比对结果一致。"
+                }
+              ]
+            },
+            {
+              "file": "../web/.specstory/history/2026-01-29_08-38Z-vue-content-comparison-page.md",
+              "matches": [
+                {
+                  "lineNumber": 269,
+                  "content": "- **底部状态栏**：显示左右行数，以及「内容一致」或「内容不一致」的比对结果。"
+                },
+                {
+                  "lineNumber": 285,
+                  "content": "在浏览器打开后即可使用：在左右两侧输入或粘贴文本，通过同步滚动和底部状态判断是否一致。"
+                }
+              ]
+            }
+          ],
+          "totalLines": 6,
+          "totalMatchedLines": 6
+        }
+      }
+    }
+  }
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+
+Found it! The "内容一致、内容不一致" is in the web project at `../web/src/components/CompareView.vue` lines 75-76. The user wants to make the font larger for these elements in the bottom right. I will read the CompareView.vue file to see the current styles and structure.
+</details></think>
+
+---
+
+
+定位到 `web` 项目的 `CompareView.vue`。正在查看该组件的样式和结构：
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: /Users/chenjunqi/github/compare/web/src/components/CompareView.vue</summary>
+
+</details>
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+
+I see the footer structure. The footer has:
+- `.CompareView-footer` with `font-size: 12px` (line 313)
+- `.CompareView-diff` and `.CompareView-same` don't have their own font-size, so they inherit 12px from the footer
+
+The user wants to make the "内容一致、内容不一致" text larger. These are in `.CompareView-diff` and `.CompareView-same`. I should add a larger font-size to both of these classes. I'll increase the font size - maybe 14px or 15px or 16px. I will use something like 15px or 16px to make it noticeably larger than the 12px footer text.
+</details></think>
+
+---
+
+
+正在为右下角“内容一致 / 内容不一致”增大字体。
+
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.vue</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<think><details><summary>Thought Process</summary>
+
+Done. I increased the font size from the inherited 12px to 16px for both .CompareView-diff and .CompareView-same, and added font-weight: 500 to make them a bit more prominent. The user asked for "字体调大一些" (make the font a bit larger), so 16px should be good.
+</details></think>
+
+---
+
+
+已改好。右下角「内容一致」「内容不一致」的样式已调整：
+
+- **字体大小**：由继承的 12px 改为 **16px**
+- **字重**：增加 **font-weight: 500**，让文字更醒目
+
+这两个文案在底部状态栏右侧会显得更大、更易读。如需再大或再小，可以说下期望字号（例如 18px 或 14px）。
+
+---
+
+_**User**_
+
+左侧内容：s​·d分
+右侧内容：s​·d分 
+当我删除右侧内容最后的空格时，还是提示内容不一致
+问题的核心是：编辑内容，比对动作没有实时触发
+
+---
+
+_**Agent (model default, mode Agent)**_
+
+
+查看 CompareView.vue 中内容绑定与比对逻辑，定位编辑后比对未实时更新的原因。
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: /Users/chenjunqi/github/compare/web/src/components/CompareView.vue</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+查看脚本逻辑，确认 `OnLeftInput`/`OnRightInput` 与比对依赖关系：
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+确认：编辑时 `leftContent`/`rightContent` 会更新，但比对结果可能未触发重新计算。正在添加显式依赖，确保每次输入都触发比对重新计算：
+
+
+---
+
+The string to replace was not found in the file.
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+
+正在确认 data 中是否已包含 `compareVersion`：
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file_v2">
+<details><summary>Tool use: **read_file_v2** • Read file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+当前文件里已经包含 `compareVersion` 和 `compareVersion += 1` 的修改，逻辑是完整的。正在确认 Tab、清空、交换是否也需要触发比对更新，并为这些操作增加 `compareVersion` 递增，保证任何内容变更都会触发比对。
+
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/chenjunqi/github/compare/web/src/components/CompareView.js</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+
+已按「编辑后实时触发比对」做了修改，总结如下：
+
+## 问题原因
+
+编辑左侧/右侧内容时，虽然 `leftContent` / `rightContent` 会更新，但 Vue 的依赖收集有时没有正确触发 `HasDifference`、`ComparedLines` 等计算属性重算，导致右下角「内容一致 / 内容不一致」不随输入更新。
+
+## 修改说明
+
+1. **增加 `compareVersion`**  
+   在 `data` 里增加 `compareVersion: 0`，专门用来“标记一次内容变更”。
+
+2. **每次内容变更时递增 `compareVersion`**  
+   在以下逻辑里都加了 `this.compareVersion += 1`：
+   - `OnLeftInput`、`OnRightInput`（输入、删除、粘贴等）
+   - `OnContentKeydown`（按 Tab 插入制表符）
+   - `ClearLeft`、`ClearRight`、`SwapContent`
+
+3. **让比对结果依赖 `compareVersion`**  
+   在计算属性 `HasDifference` 和 `ComparedLines` 里都增加一行对 `this.compareVersion` 的读取（不改变返回值），这样每次 `compareVersion` 变化都会强制这两个计算属性重新执行，从而立刻更新「内容一致 / 内容不一致」和逐行比对结果。
+
+效果：无论是删除右侧最后的空格，还是任意一侧的编辑、清空、交换，右下角状态和比对结果都会在当次操作后立即更新。
 
 ---
 

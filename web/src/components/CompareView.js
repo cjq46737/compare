@@ -125,19 +125,25 @@ export default {
     },
     NormalizeForCompare(text) {
       if (!text) return ''
-      const stripped = this.strictCompare || this.contentType !== 'sql'
-        ? text
-        : this.StripSqlComments(text)
+      let stripped = text
+      if (!this.strictCompare) {
+        if (this.contentType === 'sql') stripped = this.StripSqlComments(text)
+        else if (this.contentType === 'java') stripped = this.StripJavaComments(text)
+      }
       return stripped
         .split('\n')
         .map((line) => this.NormalizeLine(line))
         .join('\n')
     },
-    // 非严格且 SQL 时：先剥注释再按行规范化；否则严格用原行，非严格非 SQL 仅按行空白规范化
+    // 非严格且 SQL/Java 时：先剥注释再按行规范化；否则严格用原行，非严格其他类型仅按行空白规范化
     GetNormalizedLinesForCompare(lines, fullText) {
       if (this.strictCompare) return lines
       if (this.contentType === 'sql') {
         const stripped = this.StripSqlComments(fullText || '')
+        return stripped.split('\n').map((line) => this.NormalizeLine(line))
+      }
+      if (this.contentType === 'java') {
+        const stripped = this.StripJavaComments(fullText || '')
         return stripped.split('\n').map((line) => this.NormalizeLine(line))
       }
       return lines.map((line) => this.NormalizeLine(line))
@@ -190,6 +196,92 @@ export default {
           }
         } else if (state === 'double') {
           if (c === '"') {
+            out += c
+            state = 'normal'
+            i += 1
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'line') {
+          if (c === '\n' || c === '\r') {
+            out += c
+            state = 'normal'
+            i += 1
+            if (c === '\r' && next === '\n') {
+              out += next
+              i += 1
+            }
+          } else {
+            i += 1
+          }
+        } else if (state === 'block') {
+          if (c === '*' && next === '/') {
+            state = 'normal'
+            i += 2
+          } else {
+            i += 1
+          }
+        }
+      }
+      return out
+    },
+    // 去除 Java 注释（// 单行、/* */ 及 /** */ 块），不删除字符串/字符字面量内的符号
+    StripJavaComments(text) {
+      if (text == null || text === '') return ''
+      const s = String(text)
+      let out = ''
+      let i = 0
+      let state = 'normal' // normal | double | single | line | block
+      while (i < s.length) {
+        const c = s[i]
+        const next = s[i + 1]
+        if (state === 'normal') {
+          if (c === '"') {
+            out += c
+            state = 'double'
+            i += 1
+          } else if (c === "'") {
+            out += c
+            state = 'single'
+            i += 1
+          } else if (c === '/' && next === '/') {
+            state = 'line'
+            i += 2
+          } else if (c === '/' && next === '*') {
+            state = 'block'
+            i += 2
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'double') {
+          if (c === '\\') {
+            out += c
+            if (i + 1 < s.length) {
+              out += s[i + 1]
+              i += 2
+            } else {
+              i += 1
+            }
+          } else if (c === '"') {
+            out += c
+            state = 'normal'
+            i += 1
+          } else {
+            out += c
+            i += 1
+          }
+        } else if (state === 'single') {
+          if (c === '\\') {
+            out += c
+            if (i + 1 < s.length) {
+              out += s[i + 1]
+              i += 2
+            } else {
+              i += 1
+            }
+          } else if (c === "'") {
             out += c
             state = 'normal'
             i += 1
